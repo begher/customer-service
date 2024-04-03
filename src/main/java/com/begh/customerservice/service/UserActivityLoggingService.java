@@ -34,7 +34,6 @@ public class UserActivityLoggingService {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            // Handle exceptions or logging errors
         }
     }
 }
