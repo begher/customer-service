@@ -4,7 +4,7 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-src/main/resources/holidays-415709-076805989ffb.json
+/src/main/resources/holidays-415709-076805989ffb.json
 
 ### STS ###
 .apt_generated
