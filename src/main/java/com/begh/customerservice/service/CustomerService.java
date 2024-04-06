@@ -6,20 +6,33 @@ import com.begh.customerservice.util.IdProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class CustomerService {
 
     private final CustomerRepository repo;
+    private final UserActivityLoggingService log;
 
     public boolean addCustomerIfNotExist(String email){
-        System.out.println(email);
-        if(email == "email@email.com"){
-            System.out.println("exist");
-            return false;
-        }
-            System.out.println("added with id " + IdProvider.getRandomId());
+        Customer customer = repo.findCustomerByEmail(email);
+        if(customer == null){
+            customer = repo.save(
+                    Customer.builder()
+                            .id(IdProvider.getRandomId())
+                            .email(email)
+                            .createdAt(LocalDateTime.now())
+                            .lastActivity(LocalDateTime.now())
+                            .build()
+            );
+            log.logActivity(customer.getId() + " " + customer.getEmail(), "New user");
             return true;
+        }
+        customer.setLastActivity(LocalDateTime.now());
+        repo.save(customer);
+        log.logActivity(customer.getId() + " " + customer.getEmail(), "login");
+        return false;
     }
 }
 
