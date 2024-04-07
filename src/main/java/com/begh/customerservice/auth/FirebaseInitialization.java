@@ -16,7 +16,7 @@ public class FirebaseInitialization {
     public void initialization() {
         try {
             FirebaseOptions options = new FirebaseOptions.Builder()
-                    .setCredentials(GoogleCredentials.fromStream(new FileInputStream("/home/gustav/Downloads/dash-412012-3879c50afa19.json")))
+                    .setCredentials(GoogleCredentials.fromStream(new FileInputStream("resources/holidays-415709-076805989ffb.json")))
                     .build();
             if (FirebaseApp.getApps().isEmpty()) {
                 FirebaseApp.initializeApp(options);
