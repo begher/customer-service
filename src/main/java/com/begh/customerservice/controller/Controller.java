@@ -16,7 +16,4 @@ public class Controller {
     public ResponseEntity<String> test(){
         return ResponseEntity.ok("Emil is da king");
     }
-
-
-
 }
