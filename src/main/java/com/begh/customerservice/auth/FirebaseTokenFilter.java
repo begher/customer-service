@@ -7,7 +7,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
 import org.springframework.lang.NonNull;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,9 +18,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class FirebaseTokenFilter extends OncePerRequestFilter {
-
     CustomerService customerService;
-
     public FirebaseTokenFilter(CustomerService customerService) {
         this.customerService = customerService;
     }
@@ -37,16 +34,14 @@ public class FirebaseTokenFilter extends OncePerRequestFilter {
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
             String idToken = authorizationHeader.substring(7);
             try {
-
                 List<GrantedAuthority> authorities = Collections.singletonList(new SimpleGrantedAuthority("ROLE_USER"));
                 FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(idToken);
-                boolean isNewCustomer = customerService.addCustomerIfNotExist(decodedToken.getEmail());
+                boolean isNewCustomer = customerService.addCustomerIfNotExist(decodedToken.getEmail(), request);
                 FirebaseAuthenticationToken authentication = new FirebaseAuthenticationToken(decodedToken.getUid(), idToken,
                         authorities
                 );
                 SecurityContextHolder.getContext().setAuthentication(authentication);
                 response.setHeader("New-Customer", String.valueOf(isNewCustomer));
-
 
             } catch (Exception e) {
                 SecurityContextHolder.clearContext();
